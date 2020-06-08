@@ -1,0 +1,106 @@
+openapi: 3.0.0
+info:
+  title: Plagiarism Checking API
+  description: This is a plagiairism checking API developed using [MOSS](https://theory.stanford.edu/~aiken/moss/).
+  version: "1.0"
+servers:
+  - url: https://plagiarism-api.azurewebsites.net
+    description: This is the server's url
+tags:
+  - name: result
+paths:
+  /result:
+    get:
+      security:
+        - BasicAuth: []
+      tags:
+        - result
+      summary: Returns the information about the API.
+      description: Return API information as a json.
+      responses:
+        "200": # status code
+          description: A JSON array describing the in
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  info:
+                    type: string
+                    example: This is a plagiarism checking API. Submit to the same endpoint with fields lang and files. Lang specifies the source code language and files specifies the files. The result would have a detailed report and a list of the results.
+        "401":
+          description: Unauthorized Access
+          content:
+            text/html:
+              schema:
+                type: string
+                example: Unauthorized Access
+
+    post:
+      security:
+        - BasicAuth: []
+      tags:
+        - result
+      summary: Returns plagiarism results and the url of a detailed report.
+      description: Returns results as a json array.
+      requestBody:
+        description: Must include the language and the files array as base_64 encoded strings.
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                lang:
+                  type: string
+                  default: python
+                  enum:
+                    - python
+                    - java
+                    - c++
+                    - javascript
+                files:
+                  type: object
+                  example:
+                    1: base64_encoded_filecontents
+                    2: base64_encoded_filecontents
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  detailed_url:
+                    type: string
+                  status:
+                    type: string
+                    example: Success
+                  result:
+                    type: object
+                    properties:
+                      "1":
+                        type: integer
+                        example: 50
+                      "2":
+                        type: integer
+                        example: 0
+                      "3":
+                        type: integer
+                        example: 50
+                      "4":
+                        type: integer
+                        example: 50
+        "401":
+          description: Unauthorized Access
+          content:
+            text/html:
+              schema:
+                type: string
+                example: Unauthorized Access
+components:
+  securitySchemes:
+    BasicAuth:
+      type: http
+      scheme: basic
