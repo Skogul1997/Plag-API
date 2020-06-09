@@ -36,17 +36,30 @@ def getURL(path, lang):
         target=findUrl, args=(userID, lang, q, directory, path, a))
 
     p.start()
-
-    time.sleep(150)
-
-    if (p.is_alive() == False):
+    # start_time = time.time()
+    while(True):
+        if(p.is_alive()):
+            continue
+        else:
+            break
+    # time.sleep(150)
+    try:
         a = q.get()
         url = q.get()
         b = webscraper.getResponse(url)
         a.update(b)
         return {'status': 'Success', 'results': a, 'detailed_report_url': url}, 200
-
-    else:
-        p.terminate()
-        p.join()
+    except:
         return {'status': "Fail", 'error': "MOSS server not available."}, 503
+
+    # if (p.is_alive() == False):
+    #     a = q.get()
+    #     url = q.get()
+    #     b = webscraper.getResponse(url)
+    #     a.update(b)
+    #     return {'status': 'Success', 'results': a, 'detailed_report_url': url}, 200
+
+    # else:
+    #     p.terminate()
+    #     p.join()
+    #     return {'status': "Fail", 'error': "MOSS server not available."}, 503

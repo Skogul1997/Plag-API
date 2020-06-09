@@ -65,8 +65,9 @@ class getResult(Resource):
                 try:
                     os.mkdir(str(counter))
                 except:
-                    with open('config.txt', 'w+') as f:
+                    with open('config.txt', 'r') as f:
                         counter = int(f.read())
+                    with open('config.txt', 'w') as f:
                         f.write(str(counter+1))
                 else:
                     break

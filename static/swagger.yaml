@@ -99,6 +99,19 @@ paths:
               schema:
                 type: string
                 example: Unauthorized Access
+        "503":
+          description: Service Unavailable
+          content:
+            text/html:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: Fail
+                  error:
+                    type: string
+                    example: MOSS server not available.
 components:
   securitySchemes:
     BasicAuth:
